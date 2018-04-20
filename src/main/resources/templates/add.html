@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:src="@{../js/jquery-3.3.1.min.js}"></script>
+
+
+    <link rel="stylesheet" th:href="@{../editor.md-master/css/editormd.css}" />
+
+
+    <script th:src="@{../js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{../editor.md-master/editormd.js}"></script>
+    <script th:src="@{../editor.md-master/lib/codemirror/codemirror.min.js}"></script>
+    <link rel="stylesheet" th:href="@{../editor.md-master/lib/codemirror/lib/codemirror.css}" />
+    <link rel="stylesheet" th:href="@{../editor.md-master/lib/codemirror/addon/dialog/dialog.css}" />
+
+    <link rel="stylesheet" th:href="@{../editor.md-master/lib/codemirror/addon/search/matchesonscrollbar.css}" />
+
+</head>
+
+    <body>
+
+    <center>
+        <form action="/blog/add" method="post">
+
+            <input type="text" name="title" placeholder="title"/>
+            <div id="my-editormd" >
+                <textarea id="my-editormd-markdown-doc" name="my-editormd-markdown-doc" style="display:none;"></textarea>
+                <!-- 注意：name属性的值-->
+                <textarea id="my-editormd-html-code" name="my-editormd-html-code" style="display:none;"></textarea>
+            </div>
+
+
+          <input type="submit" value="ok"/>
+
+
+            <select id="tag_select" name="type_">
+                <option  th:each="type:${type_list}"  th:text="${type.title}" th:value="${type.type_id}"/>
+            </select>
+        <input type="text" id="type_title" placeholder="input type title"/>
+        <input type="text" id="type_info" placeholder="input type content"/>'
+        <input type="button" id="add_type" value="add type"/>
+
+        <div id="tag_container">
+            <input type="checkbox" th:each="tag:${tag_list}" name="tag_" th:value="${tag.tag_id}"/>
+        </div>
+
+        </form>
+
+
+        <input type="text" id="tag_content" placeholder="tag content"/>
+        <input type="button" id="add_tag" value="add tag"/>
+
+    </center>
+
+    <script>
+
+        $(function () {
+            $("#add_type").click(function () {
+                $.ajax({
+                    url: "http://localhost:8080/type/add",
+                    method: "post",
+                    data: {
+                        info: $("#type_info").val(),
+                        title: $("#type_title").val()
+                    },
+                    success: (function (data) {
+                        var dat = eval(data)
+                        $("#tag_select").html("")
+                        $.each(dat, function (i, item) {
+                            $("#tag_select").append("<option name='type_' value=" + $(item.type_id) + ">" + item.title + "</option>")
+                        })
+                    })
+
+                })
+            })
+
+            $("#add_tag").click(function () {
+                $.ajax({
+                    url: "http://localhost:8080/tag/add",
+                    method: "post",
+                    data: {
+                        content: $("#tag_content").val()
+                    },
+                    success: (function (data) {
+                        var dat = eval(data)
+                        $("#tag_container").html("")
+                        $.each(dat, function (i, item) {
+                            $("#tag_container").append("<input type='checkbox' name='tag_' value=" + $(item.type_id) + ">" + $(item.content) + "</input>")
+                        })
+                    })
+
+                })
+            })
+
+
+            var editor = editormd("my-editormd", {//注意1：这里的就是上面的DIV的id属性值
+                width: "90%",
+                height: 640,
+                syncScrolling: "single",
+                path: "/editor.md-master/lib/",//注意2：你的路径
+                saveHTMLToTextarea: true,//注意3：这个配置，方便post提交表单
+
+                imageUpload: true,
+                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                imageUploadURL: "/pic_upload/editormd-image-file/"//注意你后端的上传图片服务地址
+
+
+            })
+
+        })
+    </script>
+    </body>
+</html>

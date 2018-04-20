@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/mvc">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{../editor.md-master/css/editormd.css}" />
+
+    <script th:src="@{../js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{../editor.md-master/editormd.js}"></script>
+    <script th:src="@{../editor.md-master/lib/codemirror/codemirror.min.js}"></script>
+    <link rel="stylesheet" th:href="@{../editor.md-master/lib/codemirror/lib/codemirror.css}" />
+    <link rel="stylesheet" th:href="@{../editor.md-master/lib/codemirror/addon/dialog/dialog.css}" />
+
+    <link rel="stylesheet" th:href="@{../editor.md-master/lib/codemirror/addon/search/matchesonscrollbar.css}" />
+</head>
+<body>
+<form action="/blog/testmarkdown" method="get">
+    <input type="text" name="title" placeholder="title"/>
+<div type_id="my-editormd" >
+    <textarea type_id="my-editormd-markdown-doc" name="my-editormd-markdown-doc" style="display:none;"></textarea>
+    <!-- 注意：name属性的值-->
+    <textarea type_id="my-editormd-html-code" name="my-editormd-html-code" style="display:none;"></textarea>
+</div>
+<input type="submit" value="submit">
+</form>
+<input type="button" name="btn_show" value="show"/>
+<script type="text/javascript">
+    $(function() {
+       var editor= editormd("my-editormd", {//注意1：这里的就是上面的DIV的id属性值
+            width   : "90%",
+            height  : 640,
+            syncScrolling : "single",
+            path    : "/editor.md-master/lib/",//注意2：你的路径
+            saveHTMLToTextarea : true,//注意3：这个配置，方便post提交表单
+
+            imageUpload : true,
+            imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "/pic_upload/editormd-image-file/"//注意你后端的上传图片服务地址
+        });
+
+        $("#btn_show").click(function () {
+           alert($(editor).getHTML())
+        })
+
+    });
+</script>
+</body>
+</html>

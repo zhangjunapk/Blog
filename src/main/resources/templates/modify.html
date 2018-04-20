@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th=http://www.thymeleaf.org>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="../js/js/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(function () {
+
+        function getXMLHTTPRequest() {
+
+            if (XMLHttpRequest) {
+                return new XMLHttpRequest();
+            } else {
+                try {
+                    return new ActiveXObject("Msxml2.XMLHTTP")
+                } catch (e) {
+                    return new ActiveXObject("Microsoft.XMLHTTP")
+                }
+            }
+
+        }
+
+
+    })
+</script>
+
+<body>
+<form type_id="form" th:action="@{/blog/${current_blog.type_id}}">
+    <input type="text" hidden name="_method" value="PUT">
+    <input type="text" hidden name="type_id" value="${current_blog.type_id}"/>
+    <input type="text" value="${current_blog.title}">
+
+    <input type="text" value="${current_blog.content}">
+    <input type="submit" value="submit"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>show a blog</title>
+</head>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script>
+    $(function () {
+
+        function getXMLHTTPRequest(){
+
+            if(XMLHttpRequest){
+                return new XMLHttpRequest();
+            }else{
+                try{
+                    return new ActiveXObject("Msxml2.XMLHTTP")
+                }catch (e) {
+                    return new ActiveXObject("Microsoft.XMLHTTP")
+                }
+            }
+
+        }
+
+
+
+
+        $("#delete_btn").click(function () {
+            var req=getXMLHTTPRequest();
+            req.open("DELETE","http://localhost:8080/blog/"+$(current_blog.type_id));
+            req.send(null);
+            document.write(req.responseText);
+        })
+        
+        $("#modify_btn").click(function () {
+            var req=getXMLHTTPRequest();
+            req.open("GET","http://localhost:8080/blog/modify/"+$(current_blog.type_id));
+            req.send(null);
+            document.write(req.responseText);
+        })
+    })
+
+
+
+
+</script>
+<body>
+<h1 th:text="${current_blog.title}"></h1>
+<input type="button" type_id="delete_btn" value="delete"/>
+<input type="button" type_id="modify_btn" value="modify"/>
+<h4 th:utext="${current_blog.content}"></h4>
+<h6 th:text="${current_blog.date}"></h6>
+</body>
+</html>

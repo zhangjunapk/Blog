@@ -1,0 +1,116 @@
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th=http://www.thymeleaf.org></html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+<script src="../js/js.cookie.js"></script>
+<script>
+    function setBlogByTypeID(type_id){
+        $.ajax({
+            type: "get",
+            url: "/blog/get_blog_by_type_init/"+type_id,
+            data: {
+            },
+            dataType: "json",
+            success: function(data){
+                var d=eval(data)
+                alert("code:"+d+"\nresult:"+data+"\ntextStatus:\njqXHR:");
+                $(".blogs").html("");
+                $.each(d,function (i,item) {
+                   var title="<div class='blog_title'>"+item.title+"</div>"
+                    var content="<div class='blog_content'>"+item.content+"</div>"
+                    
+                    $(title).click(function () {
+                        window.location.href("http://lcoalhost:8080/blog/"+item.type_id);
+                    })
+                    
+                    $(".blogs").append(title)
+                    $(".blogs").append(content)
+
+                    
+
+                })
+
+                alert(Cookies.get("page_count"))
+
+                for(var i=0;i<Cookies.get("page_count")+1;i++){
+                    var href="http://"
+                }
+
+            }
+        });
+
+
+    }
+
+
+
+    function setBLogNew(){
+        $.ajax({
+            type: "get",
+            url: "/blog/get_blog_new_init",
+            data: {
+            },
+            dataType: "json",
+            success: function(data){
+                var d=eval(data)
+                alert("code:"+d+"\nresult:"+data+"\ntextStatus:\njqXHR:");
+            }
+        });
+    }
+    function setBlogByTagID(type_id){
+        $.ajax({
+            type: "get",
+            url: "/blog/get_blog_by_tag_init/"+type_id,
+            data: {
+            },
+            dataType: "json",
+            success: function(data){
+                var d=eval(data)
+                alert("code:"+d+"\nresult:"+data+"\ntextStatus:\njqXHR:");
+            }
+        });
+    }
+</script>
+<body>
+<a href="/blog/add">tianjia</a>
+
+
+
+<div class="left">
+<div class="type"  th:each="type:${type_list}">
+   <input type="button" th:value="${type.title}" th:onclick="'setBlogByTypeID('+${type.type_id}+')'">
+</div>
+</div>
+</div>
+
+<div class="center">
+
+    <div class="loop_pic">
+
+    </div>
+
+    <div class="search_bar">
+        <input type="button" value="show new blog" onclick="setBLogNew()"/>
+        <input type="button" value="show hot blog"/>
+
+        <input type="text" placeholder="search"/>
+        <input type="button" value="search">
+    </div>
+    <div class="blog_container">
+        <div class="blogs">
+
+        </div>
+
+        <div class="page">
+
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
